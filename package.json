@@ -1,0 +1,24 @@
+{
+  "name": "svg-stripes-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyarunts/svg-stripes-generator.git"
+  },
+  "author": "Davit Kyarunts",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kyarunts/svg-stripes-generator/issues"
+  },
+  "homepage": "https://github.com/kyarunts/svg-stripes-generator#readme",
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "glob": "^7.1.3",
+    "simple-svg-tools": "^1.1.12"
+  }
+}
