@@ -33,8 +33,9 @@ module.exports = (options) => {
 
     function writeFile(dest, data) {
         if (!dest) throw 'Destination file is not provided';
-        fs.writeFile(dest, data, err => {
-            throw 'something went wrong';
+        fs.writeFile(dest, data, (err) => {
+            if (err) throw 'something went wrong';
+            console.log('\x1b[36m%s\x1b[0m', '🦉 Stripes generated!!!');
         });
     }
 
