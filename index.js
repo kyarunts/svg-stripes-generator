@@ -66,7 +66,7 @@ module.exports = (options) => {
                         tools.Tags(svg).then(svg => {
                             symbols.push(generateSymbol(
                                 options.symbolAttributes,
-                                getIconName(file),
+                                options.prefix ? `${options.prefix}-${getIconName(file)}` : getIconName(file),
                                 svg.$svg(':root').get(0).attribs.viewBox,
                                 removeAttributes(svg.getBody())
                             ));
