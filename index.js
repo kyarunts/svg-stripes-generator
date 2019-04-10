@@ -22,15 +22,16 @@ module.exports = (options) => {
 
     return new Promise((resolve, reject) => {
         getFiles(options.src).then(files => {
-            getSymbols(files).then(symbols => {
+            getSymbols(files).then(data => {
+                const {symbols, symbolIds} = data;
                 const content = createSvgElement(options.svgAttributes, symbols.join(' '));
                 if (options.dest) {
                     writeFile(options.dest, content).then(message => {
                         console.log('\x1b[36m%s\x1b[0m', message);
-                        resolve(content);
+                        resolve({data: content, symbolIds});
                     });
                 } else {
-                    resolve(content);
+                    resolve({data: content, symbolIds});
                 }
             });
         });
@@ -63,6 +64,7 @@ module.exports = (options) => {
 
     function getSymbols(files) {
         const symbols = [];
+        const symbolIds = [];
         return new Promise((resolve, reject) => {
             if (!files) reject('Files are not provided');
 
@@ -70,13 +72,15 @@ module.exports = (options) => {
                 tools.ImportSVG(file).then(svg => {
                     tools.SVGO(svg).then(svg => {
                         tools.Tags(svg).then(svg => {
+                            const iconId = options.prefix ? `${options.prefix}-${getIconName(file)}` : getIconName(file);
+                            symbolIds.push(iconId);
                             symbols.push(generateSymbol(
                                 options.symbolAttributes,
-                                options.prefix ? `${options.prefix}-${getIconName(file)}` : getIconName(file),
+                                iconId,
                                 svg.$svg(':root').get(0).attribs.viewBox,
                                 removeAttributes(svg.getBody())
                             ));
-                            if (symbols.length === files.length) resolve(symbols);
+                            if (symbols.length === files.length) resolve({symbols, symbolIds});
                         })
                     });
                 })
