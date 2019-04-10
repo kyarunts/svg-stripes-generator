@@ -8,8 +8,6 @@ const DEFAULT = {
     removeAttrs: ['fill', 'stroke', 'vector-effect', 'xmlns:default'],
     prefix: '',
     svgAttributes: {
-        class: 'test-icons',
-        style: 'display: none;',
         x: '0px',
         y: '0px',
     },
