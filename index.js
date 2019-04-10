@@ -22,12 +22,19 @@ module.exports = (options) => {
     options = Object.assign({}, DEFAULT, options);
     const regexps = getRegexps(options.removeAttrs);
 
-    getFiles(options.src).then(files => {
-        getSymbols(files).then(symbols => {
-            writeFile(
-                options.dest, 
-                createSvgElement(options.svgAttributes, symbols.join(' '))
-            );
+    return new Promise((resolve, reject) => {
+        getFiles(options.src).then(files => {
+            getSymbols(files).then(symbols => {
+                const content = createSvgElement(options.svgAttributes, symbols.join(' '));
+                if (options.dest) {
+                    writeFile(options.dest, content).then(message => {
+                        console.log('\x1b[36m%s\x1b[0m', message);
+                        resolve(content);
+                    });
+                } else {
+                    resolve(content);
+                }
+            });
         });
     });
 
@@ -35,7 +42,7 @@ module.exports = (options) => {
         if (!dest) throw 'Destination file is not provided';
         fs.writeFile(dest, data, (err) => {
             if (err) throw 'something went wrong';
-            console.log('\x1b[36m%s\x1b[0m', '🦉 Stripes generated!!!');
+            return Promise.resolve('🦉 Stripes generated!!!');
         });
     }
 
