@@ -19,7 +19,6 @@ const DEFAULT = {
 module.exports = (options) => {
     options = Object.assign({}, DEFAULT, options);
     const regexps = getRegexps(options.removeAttrs);
-
     return new Promise((resolve, reject) => {
         getFiles(options.src).then(files => {
             getSymbols(files).then(data => {
@@ -47,7 +46,7 @@ module.exports = (options) => {
 
     function getRegexps(removeAttrs) {
         return removeAttrs.map(attr => {
-            return new RegExp(`${attr}=".*?"`, 'g');
+            return new RegExp(`${attr}="(?!none).*?"`, 'g');
         });
     }
 
@@ -70,7 +69,9 @@ module.exports = (options) => {
 
             files.forEach((file) => {
                 tools.ImportSVG(file).then(svg => {
-                    tools.SVGO(svg).then(svg => {
+                    tools.SVGO(svg, {
+                        convertShapeToPath: false
+                    }).then(svg => {
                         tools.Tags(svg).then(svg => {
                             const iconId = options.prefix ? `${options.prefix}-${getIconName(file)}` : getIconName(file);
                             symbolIds.push(iconId);
